@@ -84,10 +84,24 @@ class MapProblem(GraphProblem):
         #                   Note: the result should be of type np.array.
         #                           you can convert a pd.DataFrame to np.array using pd.DataFrame.to_numpy()
         days_of_the_week = ['Sun', 'Mon', 'Tue', 'Wed'] # optional variable
-        raise NotImplementedError  # TODO: remove this line!
+        # set the data file path
+        history_base_data_file = os.path.join(Consts.DATA_PATH, 'history_4_days_target_549.csv')
+
+        # read the csv file
+        df = pd.read_csv(history_base_data_file)
+        res =pd.DataFrame(pd.DataFrame.mean(df,1))
+        self.time_to_goal_history_based_data=res.to_numpy()
+        # self-check, if the data file includes self.target_junction_id
+       # assert (str(self.target_junction_id) in df.columns)
+
+        # extract the data matching to self.target_junction_id and convert to np.array.
+        # note: you can extract the data of a single column named 'name' from a pd.DataFrame 'df' by: df['name']
+       # data = df[str(self.target_junction_id)].to_numpy()
+        #self.time_to_goal_history_based_data = data # assign the data
+        #self.time_to_goal_history_based_data=pd.DataFrame.mean(self,1)
 
 
-        assert(type(self.time_to_goal_history_based_data) is np.ndarray) # self-check
+#        assert(type(self.time_to_goal_history_based_data) is np.ndarray) # self-check
 
 
     def expand_state_with_costs(self, state_to_expand: GraphProblemState) -> Iterator[OperatorResult]:

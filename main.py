@@ -81,7 +81,7 @@ def run_astar_for_weights_in_range(heuristic_type: HeuristicFunctionType, proble
             cost.append(res.solution_g_cost)
             expended_states.append(res.nr_expanded_states)
             weigth.append(i)
-    plot_distance_and_expanded_wrt_weight_figure(weigth,cost,expended_states)
+    plot_distance_and_expanded_wrt_weight_figure(problem.name,weigth,cost,expended_states)
 
     # TODO [Ex.20]:
     #  1. Create an array of `n` numbers equally spread in the segment
@@ -145,7 +145,7 @@ def map_problem_experiments():
     #           solve the `map_problem` with it and print the results.
     #       3. save the visualization of the path in 'images/UCS_path_time_based.png'
     # You can use the code in the function 'toy_map_problem_experiment' for help.
-    map_problem=MapProblem(streets_map, start_point, target_point, 'current_time')
+    map_problem = MapProblem(streets_map, start_point, target_point, 'current_time')
     uc = UniformCost()
     res = uc.solve_problem(map_problem)
     print(res)
@@ -167,7 +167,9 @@ def map_problem_experiments():
     # TODO [Ex.18]: create an instance of `AStar` with the `TimeBasedAirDistHeuristic`,
     #       and use the default value for the heuristic_weight,
     #       solve the same `map_problem` with it and print the results (as before).
-    exit()  # TODO: remove!
+    timebase = AStar(TimeBasedAirDistHeuristic)
+    res = timebase.solve_problem(map_problem)
+    print(res)
 
     # TODO [Ex.20]:
     #  1. Complete the implementation of the function
@@ -177,20 +179,28 @@ def map_problem_experiments():
     #     (upper in this file).n
     #  3. Call here the function `run_astar_for_weights_in_range()`
     #     with `TimeBasedAirDistHeuristic` and `map_problem`.
-    run_astar_for_weights_in_range(TimeBasedAirDistHeuristic,map_problem)
+
+    run_astar_for_weights_in_range(TimeBasedAirDistHeuristic, map_problem)
     # TODO [Ex.24]: 1. Call the function set_additional_shortest_paths_based_data()
     #                   to set the additional shortest-paths-based data in `map_problem`.
     #                   For more info see `problems/map_problem.py`.
     #               2. create an instance of `AStar` with the `ShortestPathsBasedHeuristic`,
     #                  solve the same `map_problem` with it and print the results (as before).
-    exit()  # TODO: remove!
+    map_problem.set_additional_shortest_paths_based_data()
+    shortestpath = AStar(ShortestPathsBasedHeuristic)
+    res = shortestpath.solve_problem(map_problem)
+    print(res)
+
 
     # TODO [Ex.25]: 1. Call the function set_additional_history_based_data()
     #                   to set the additional history-based data in `map_problem`.
     #                   For more info see `problems/map_problem.py`.
     #               2. create an instance of `AStar` with the `HistoryBasedHeuristic`,
     #                   solve the same `map_problem` with it and print the results (as before).
-    exit()  # TODO: remove!
+    map_problem.set_additional_history_based_data()
+    historyheuristic = AStar(HistoryBasedHeuristic)
+    res = historyheuristic.solve_problem(map_problem)
+    print(res)
 
     # Try using A*eps to improve the speed (#dev) with a non-acceptable heuristic.
     # TODO [Ex.29]: Create an instance of `AStarEpsilon` with the `ShortestPathsBasedHeuristic`.

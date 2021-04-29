@@ -49,6 +49,7 @@ class AStar(BestFirstSearch):
         Remember: In Weighted-A* the f-score is defined by ((1-w) * cost) + (w * h(state)).
         Notice: You may use `search_node.g_cost`, `self.heuristic_weight`, and `self.heuristic_function`.
         """
+
         return ((1-self.heuristic_weight)*search_node.g_cost)+(self.heuristic_weight*self.heuristic_function.estimate(search_node.state))
 
 
@@ -71,19 +72,22 @@ class AStar(BestFirstSearch):
         Remember: In A*, in contrast to uniform-cost, a successor state might have an already closed node,
                   but still could be improved.
         """
-        state = successor_node.state
-        if self.open.has_state(state):
-            if successor_node.g_cost < self.open.get_node_by_state(state).g_cost:
-                self.open.extract_node(self.open.get_node_by_state(state))
+        if successor_node is None:
+            return
+        if self.open.has_state(successor_node.state):
+            node_older = self.open.get_node_by_state(successor_node.state)
+            if successor_node.g_cost < node_older.g_cost:
+                self.open.extract_node(node_older)
+                self.open.push_node(successor_node)
+
+        elif self.close.has_state(successor_node.state):
+            node_older = self.close.get_node_by_state(successor_node.state)
+            if successor_node.g_cost < node_older.g_cost:
+                self.close.remove_node(node_older)
                 self.open.push_node(successor_node)
             else:
-                return  # useless but helpful to compare with the algo from class
+                return
         else:
-            if self.close.has_state(state):
-                if successor_node.g_cost < self.close.get_node_by_state(state).g_cost:
-                    self.open.push_node(successor_node)
-                    self.close.remove_node(self.close.get_node_by_state(state))
-                else:
-                    return  # useless but helpful to compare with the algo from class
-            else:
-                self.open.push_node(successor_node)
+            self.open.push_node(successor_node)
+
+

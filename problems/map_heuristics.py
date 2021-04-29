@@ -24,12 +24,11 @@ class TimeBasedAirDistHeuristic(HeuristicFunction):
         Use the method `calc_air_distance_from()` to calculate the air
          distance between two junctions.
         """
-        junc=self.problem.streets_map[state.junction_id]
-        air_dist=.calc_air_distance_from(junc)
+        sol= self.problem.streets_map[self.problem.target_junction_id].calc_air_distance_from(self.problem.streets_map[state.junction_id])
+        return sol/MAX_ROADS_SPEED
         assert isinstance(self.problem, MapProblem)
         assert isinstance(state, MapState)
 
-        raise NotImplementedError  # TODO: remove this line!
 
 
 class ShortestPathsBasedHeuristic(HeuristicFunction):
