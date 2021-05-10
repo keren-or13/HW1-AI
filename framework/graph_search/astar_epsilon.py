@@ -74,22 +74,18 @@ class AStarEpsilon(AStar):
         if self.open.is_empty():
             return None
         focal = [self.open.pop_next_node()]
-        epsilon=self.focal_epsilon
-        priorities = [self.within_focal_priority_function(focal[-1], problem, self)]
-        max_focal = focal[0].expanding_priority * (1 +epsilon)
+        priority = [self.within_focal_priority_function(focal[-1], problem, self)]
+        max_focal = focal[0].expanding_priority * (1 + self.focal_epsilon)
         if self.max_focal_size is not None:
-            while not self.open.is_empty() and self.open.peek_next_node().expanding_priority <= max_focal and len(
-                    focal) < self.max_focal_size:
-                focal.append(self.open.pop_next_node())
-                priorities.append(self.within_focal_priority_function(focal[-1], problem, self))
-        else:
             while not self.open.is_empty() and self.open.peek_next_node().expanding_priority <= max_focal:
+                if len(focal) >= self.max_focal_size:
+                    break
                 focal.append(self.open.pop_next_node())
-                priorities.append(self.within_focal_priority_function(focal[-1], problem, self))
-        index_to_pop = np.argmin(priorities)
-        node_to_return = focal.pop(index_to_pop)
+                priority.append(self.within_focal_priority_function(focal[-1], problem, self))
+        return_num_node = np.argmin(priority)
+        return_node = focal.pop(return_num_node)
         for node in focal:
             self.open.push_node(node)
-        self.close.add_node(node_to_return)
-        return node_to_return
+        self.close.add_node(return_node)
+        return return_node
 

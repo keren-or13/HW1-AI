@@ -208,7 +208,10 @@ def map_problem_experiments():
     #       Use focal_epsilon=0.23, and max_focal_size=40.
     #       Use within_focal_priority_function=within_focal_h_sum_priority_function. This function
     #        (defined just above) is internally using the `HistoryBasedHeuristic`.
-    exit()  # TODO: remove!
+    shortesrastareps=AStarEpsilon(ShortestPathsBasedHeuristic,within_focal_priority_function=within_focal_h_sum_priority_function
+                                  ,focal_epsilon=0.23,max_focal_size=40)
+    res = shortesrastareps.solve_problem(map_problem)
+    print(res)
 
 
 def run_all_experiments():
